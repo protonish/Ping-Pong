@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>chat page</title>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/jquery.easing.js"></script>
+</head>
+<body>
+<div style="text-align:center; width:100%; background:yellow;"> A GREY MATTER PRODUCT OF <strong>NISHANT KAMBHATLA</strong></div>
+name:<input type="text" id="name"/>
+<input type="button" id="setName" value="set-my-name"/><br>
+<input type="button" id="resetB" value="reset"/>
+<textarea id="divText" style="height:50%;width:100%;font-size:20px;color:black;" disabled></textarea>
+<input type="text"  id="htmlTb" style="width:100%;"/>
+
+<script>
+var textarea = document.getElementById('divText');
+textarea.scrollTop = textarea.scrollHeight;
+
+$("#htmlTb").keypress(function(event){
+if(event.which==13)
+{
+textarea.scrollTop = textarea.scrollHeight;
+var htmlTbV=$("#htmlTb").val()+"\n";
+$.post("chatP.php",{htmlRequest:htmlTbV,updateR:1},function(data){
+$("#htmlTb").val("");
+}
+);
+}
+});
+
+$("#resetB").click(function(){
+var htmlTbV=$("#htmlTb").val()+"\n";
+$.post("chatP.php",{htmlRequest:htmlTbV,updateR:2},function(data){
+$("#htmlTb").val("");}
+);
+
+}
+);
+
+setInterval(function(){
+textarea.scrollTop = textarea.scrollHeight;
+var htmlTbV=$("#htmlTb").val()+"\n";
+$.post("chatP.php",{htmlRequest:htmlTbV,updateR:0},function(data){
+$("#divText").val(data.phpResponse);
+},"json"
+);
+},1000);
+
+$("#setName").click(function(){
+var htmlTbV=$("#htmlTb").val()+"\n";
+var nhtml=$("#name").val();
+$.post("chatP.php",{htmlRequest:htmlTbV,updateR:4,name:nhtml},function(data){
+},"json"
+);
+
+});
+
+</script>
+</body>
+</html>
+
